@@ -3,6 +3,20 @@
 Connects to your OMS as a FIX 4.4 client, sends messages automatically,
 and validates every response tag by tag. No UI. Pure terminal output.
 
+---## What It Tests
+
+| # | File | What It Covers |
+|---|------|----------------|
+| 01 | `01_new_order.json` | **New Order (35=D)** — valid Buy/Sell Limit with NoParties repeating groups; risk limit rejection (qty > 10000) |
+| 02 | `02_cancel.json` | **Cancel (35=F)** — cancel by unknown ClOrdID (reject expected); Cancel-Replace (35=G) flow |
+| 03 | `03_cancel_active_order.json` | **Cancel Active Order** — places a live resting order first, then cancels it and confirms OrdStatus=4 |
+| 04 | `04_replace_active_order.json` | **Replace Active Order (35=G)** — amends price/qty on a resting order and verifies OrdStatus=5 (Replaced) |
+| 05 | `05_fill_scenarios.json` | **Fill Matching** — seeds the book with a Sell, then sends a crossing Buy to trigger a full fill; also tests partial fill where BUY qty < SELL qty |
+| 06 | `06_position_request.json` | **Position Request** — queries open positions from the OMS |
+| 07 | `07_fok_ioc_experiment.json` | **FOK / IOC** — seeds 3×100 Sell orders; FOK Buy 400 (not enough liquidity → killed); IOC Buy 400 (fills 300, cancels remaining 100) |
+| 08 | `08_algo_order.json` | **Algo Order** — sends an algorithmic order and checks OMS acknowledgement |
+| 09 | `09_mass_cancel.json` | **Mass Cancel (35=q/r)** — places 2 orders, sends MassCancelRequest by symbol, expects 2 cancel ExecReports + MassCancelReport (35=r) with count=2 |
+
 ---
 
 ## Project Structure
@@ -39,7 +53,7 @@ FIX TEST/
 
 ```bash
 # 1. Make sure OMS is running first
-
+Ran your oms 
 
 # 2. Install dependency
 cd FIX TEST
