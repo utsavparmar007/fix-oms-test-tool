@@ -1,0 +1,105 @@
+[
+  {
+    "name": "Fill Scenario - Step 1: Place SELL (sits in ask book)",
+    "send": {
+      "35": "D",
+      "55": "FILLTEST",
+      "54": "2",
+      "38": "100",
+      "44": "99.00",
+      "40": "2",
+      "21": "1"
+    },
+    "expect": {
+      "35": "8",
+      "39": "0",
+      "150": "0",
+      "55": "FILLTEST",
+      "54": "2"
+    },
+    "delay_after": 0.3
+  },
+  {
+    "name": "Fill Scenario - Step 2: Place BUY at same price -> full fill",
+    "send": {
+      "35": "D",
+      "55": "FILLTEST",
+      "54": "1",
+      "38": "100",
+      "44": "99.00",
+      "40": "2",
+      "21": "1"
+    },
+    "expect_sequence": [
+      {
+        "_label": "NEW ack for BUY order",
+        "35": "8",
+        "39": "0",
+        "150": "0",
+        "55": "FILLTEST",
+        "54": "1"
+      },
+      {
+        "_label": "FILL report for BUY order (ExecType=F in FIX 4.4)",
+        "35": "8",
+        "39": "2",
+        "150": "F",
+        "55": "FILLTEST",
+        "54": "1",
+        "32": "100"
+      }
+    ],
+    "drain_after": true,
+    "delay_after": 0.3
+  },
+  {
+    "name": "Partial Fill - Step 1: Place SELL 200",
+    "send": {
+      "35": "D",
+      "55": "PARTIAL",
+      "54": "2",
+      "38": "200",
+      "44": "50.00",
+      "40": "2",
+      "21": "1"
+    },
+    "expect": {
+      "35": "8",
+      "39": "0",
+      "150": "0",
+      "55": "PARTIAL"
+    },
+    "delay_after": 0.3
+  },
+  {
+    "name": "Partial Fill - Step 2: BUY 100 against 200 SELL -> BUY fully filled, SELL partially filled",
+    "send": {
+      "35": "D",
+      "55": "PARTIAL",
+      "54": "1",
+      "38": "100",
+      "44": "50.00",
+      "40": "2",
+      "21": "1"
+    },
+    "expect_sequence": [
+      {
+        "_label": "NEW ack for BUY",
+        "35": "8",
+        "39": "0",
+        "150": "0",
+        "55": "PARTIAL"
+      },
+      {
+        "_label": "FILL for BUY (ExecType=F, OrdStatus=2 filled, qty=100)",
+        "35": "8",
+        "39": "2",
+        "150": "F",
+        "32": "100",
+        "55": "PARTIAL"
+      }
+    ],
+    "drain_after": true,
+    "delay_after": 0.3
+  }
+]

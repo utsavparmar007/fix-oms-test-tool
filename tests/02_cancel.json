@@ -1,0 +1,36 @@
+[
+  {
+    "name": "Cancel - Unknown ClOrdID (expect Cancel Reject)",
+    "send": {
+      "35": "F",
+      "41": "NONEXISTENT-ORDER-123",
+      "11": "CANCEL-TEST-001",
+      "55": "AAPL",
+      "54": "1"
+    },
+    "expect": {
+      "35": "9",
+      "58": "Unknown Order"
+    },
+    "delay_after": 0.3
+  },
+  {
+    "name": "Cancel/Replace - Unknown ClOrdID (expect Cancel Reject)",
+    "send": {
+      "35": "G",
+      "41": "NONEXISTENT-ORDER-456",
+      "11": "REPLACE-TEST-001",
+      "55": "MSFT",
+      "54": "1",
+      "38": "200",
+      "44": "420.00",
+      "40": "2",
+      "21": "1"
+    },
+    "expect": {
+      "35": "9",
+      "58": "Unknown Order"
+    },
+    "delay_after": 0.3
+  }
+]

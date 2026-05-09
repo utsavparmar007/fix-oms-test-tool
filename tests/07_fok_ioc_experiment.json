@@ -1,0 +1,162 @@
+[
+  {
+    "name": "Step 1a: Seed the Book - Sell 100 AAPL @ 150.00",
+    "send": {
+      "35": "D",
+      "55": "EXP1",
+      "54": "2",
+      "38": "100",
+      "44": "150.00",
+      "40": "2",
+      "59": "0",
+      "21": "1"
+    },
+    "expect": {
+      "35": "8",
+      "39": "0",
+      "150": "0",
+      "55": "EXP1"
+    },
+    "delay_after": 0.3
+  },
+  {
+    "name": "Step 1b: Seed the Book - Sell 100 AAPL @ 150.00",
+    "send": {
+      "35": "D",
+      "55": "EXP1",
+      "54": "2",
+      "38": "100",
+      "44": "150.00",
+      "40": "2",
+      "59": "0",
+      "21": "1"
+    },
+    "expect": {
+      "35": "8",
+      "39": "0",
+      "150": "0",
+      "55": "EXP1"
+    },
+    "delay_after": 0.3
+  },
+  {
+    "name": "Step 1c: Seed the Book - Sell 100 AAPL @ 150.00",
+    "send": {
+      "35": "D",
+      "55": "EXP1",
+      "54": "2",
+      "38": "100",
+      "44": "150.00",
+      "40": "2",
+      "59": "0",
+      "21": "1"
+    },
+    "expect": {
+      "35": "8",
+      "39": "0",
+      "150": "0",
+      "55": "EXP1"
+    },
+    "delay_after": 0.3
+  },
+  {
+    "name": "Step 2: Test the FOK Kill Switch (Buy 400 AAPL @ 150.00 FOK)",
+    "send": {
+      "35": "D",
+      "55": "EXP1",
+      "54": "1",
+      "38": "400",
+      "44": "150.00",
+      "40": "2",
+      "59": "4",
+      "21": "1"
+    },
+    "expect_sequence": [
+      {
+        "_label": "NEW ack for FOK",
+        "35": "8",
+        "39": "0",
+        "150": "0"
+      },
+      {
+        "_label": "CANCELLED (FOK Kill Switch - Not Enough Liquidity)",
+        "35": "8",
+        "39": "4",
+        "150": "4"
+      }
+    ],
+    "drain_after": true,
+    "delay_after": 0.3
+  },
+  {
+    "name": "Step 3: Test the IOC Trash Can (Buy 400 AAPL @ 150.00 IOC)",
+    "send": {
+      "35": "D",
+      "55": "EXP1",
+      "54": "1",
+      "38": "400",
+      "44": "150.00",
+      "40": "2",
+      "59": "3",
+      "21": "1"
+    },
+    "expect_sequence": [
+      {
+        "_label": "NEW ack for IOC",
+        "35": "8",
+        "39": "0"
+      },
+      {
+        "_label": "MATCH 1: Partial Fill for IOC",
+        "35": "8",
+        "39": "1",
+        "150": "F",
+        "54": "1"
+      },
+      {
+        "_label": "MATCH 1: Fill for Seed 1",
+        "35": "8",
+        "39": "2",
+        "150": "F",
+        "54": "2"
+      },
+      {
+        "_label": "MATCH 2: Partial Fill for IOC",
+        "35": "8",
+        "39": "1",
+        "150": "F",
+        "54": "1"
+      },
+      {
+        "_label": "MATCH 2: Fill for Seed 2",
+        "35": "8",
+        "39": "2",
+        "150": "F",
+        "54": "2"
+      },
+      {
+        "_label": "MATCH 3: Partial Fill for IOC",
+        "35": "8",
+        "39": "1",
+        "150": "F",
+        "54": "1"
+      },
+      {
+        "_label": "MATCH 3: Fill for Seed 3",
+        "35": "8",
+        "39": "2",
+        "150": "F",
+        "54": "2"
+      },
+      {
+        "_label": "CANCELLED (IOC Trash Can - Remaining 100 shares)",
+        "35": "8",
+        "39": "4",
+        "150": "4",
+        "54": "1"
+      }
+    ],
+    "drain_after": true,
+    "delay_after": 0.3
+  }
+]

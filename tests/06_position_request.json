@@ -1,0 +1,133 @@
+[
+  {
+    "name": "Position Request - No positions yet (empty response)",
+    "send": {
+      "35": "AN",
+      "1": "CLIENT",
+      "581": "1",
+      "710": "POS-REQ-001",
+      "724": "0",
+      "715": "20260506",
+      "groups": {
+        "453": [
+          {
+            "448": "CLIENT",
+            "447": "D",
+            "452": "3"
+          }
+        ]
+      }
+    },
+    "expect": {
+      "35": "AP",
+      "710": "POS-REQ-001",
+      "1": "CLIENT"
+    },
+    "delay_after": 0.5,
+    "drain_after": true
+  },
+  {
+    "name": "Position Request - Place AAPL BUY to set up a fill",
+    "send": {
+      "35": "D",
+      "55": "AAPL",
+      "54": "1",
+      "38": "100",
+      "44": "150.00",
+      "40": "2",
+      "21": "1"
+    },
+    "expect": {
+      "35": "8",
+      "39": "0",
+      "150": "0",
+      "55": "AAPL"
+    },
+    "delay_after": 0.3
+  },
+  {
+    "name": "Position Request - Place matching SELL to trigger fill",
+    "send": {
+      "35": "D",
+      "55": "AAPL",
+      "54": "2",
+      "38": "100",
+      "44": "150.00",
+      "40": "2",
+      "21": "1"
+    },
+    "expect_sequence": [
+      {
+        "_label": "NEW ack for SELL",
+        "35": "8",
+        "39": "0",
+        "150": "0",
+        "55": "AAPL"
+      },
+      {
+        "_label": "FILL report for SELL",
+        "35": "8",
+        "39": "2",
+        "150": "F",
+        "55": "AAPL",
+        "32": "100"
+      }
+    ],
+    "drain_after": true,
+    "delay_after": 0.5
+  },
+  {
+    "name": "Position Request - Request positions after fill (AAPL should appear)",
+    "send": {
+      "35": "AN",
+      "1": "CLIENT",
+      "581": "1",
+      "710": "POS-REQ-002",
+      "724": "0",
+      "715": "20260506",
+      "groups": {
+        "453": [
+          {
+            "448": "CLIENT",
+            "447": "D",
+            "452": "3"
+          }
+        ]
+      }
+    },
+    "expect": {
+      "35": "AP",
+      "710": "POS-REQ-002",
+      "1": "CLIENT"
+    },
+    "delay_after": 0.5,
+    "drain_after": true
+  },
+  {
+    "name": "Position Request - Custom PosReqID echoed back correctly",
+    "send": {
+      "35": "AN",
+      "1": "CLIENT",
+      "581": "1",
+      "710": "MY-CUSTOM-REQ-999",
+      "724": "0",
+      "715": "20260506",
+      "groups": {
+        "453": [
+          {
+            "448": "CLIENT",
+            "447": "D",
+            "452": "3"
+          }
+        ]
+      }
+    },
+    "expect": {
+      "35": "AP",
+      "710": "MY-CUSTOM-REQ-999",
+      "1": "CLIENT"
+    },
+    "delay_after": 0.5,
+    "drain_after": true
+  }
+]

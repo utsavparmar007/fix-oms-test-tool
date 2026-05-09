@@ -1,0 +1,86 @@
+[
+  {
+    "name": "Replace Active Order - Step 1: Place original order",
+    "send": {
+      "35": "D",
+      "55": "NVDA",
+      "54": "1",
+      "38": "50",
+      "44": "500.00",
+      "40": "2",
+      "21": "1"
+    },
+    "expect": {
+      "35": "8",
+      "39": "0",
+      "150": "0",
+      "55": "NVDA",
+      "38": "50"
+    },
+    "capture": {
+      "nvda_order_id": "11"
+    },
+    "delay_after": 0.3
+  },
+  {
+    "name": "Replace Active Order - Step 2: Replace qty 50 -> 100",
+    "send": {
+      "35": "G",
+      "41": "{{nvda_order_id}}",
+      "55": "NVDA",
+      "54": "1",
+      "38": "100",
+      "44": "510.00",
+      "40": "2",
+      "21": "1"
+    },
+    "expect": {
+      "35": "8",
+      "39": "0",
+      "150": "5",
+      "55": "NVDA",
+      "38": "100"
+    },
+    "capture": {
+      "nvda_replaced_id": "11"
+    },
+    "delay_after": 0.3
+  },
+  {
+    "name": "Replace Active Order - Step 3: Cancel the replaced order",
+    "send": {
+      "35": "F",
+      "41": "{{nvda_replaced_id}}",
+      "55": "NVDA",
+      "54": "1"
+    },
+    "expect": {
+      "35": "8",
+      "39": "4",
+      "150": "4",
+      "55": "NVDA"
+    },
+    "capture": {
+      "nvda_final_id": "11"
+    },
+    "delay_after": 0.3
+  },
+  {
+    "name": "Replace Active Order - Step 4: Try to replace a cancelled order (expect reject)",
+    "send": {
+      "35": "G",
+      "41": "{{nvda_final_id}}",
+      "55": "NVDA",
+      "54": "1",
+      "38": "200",
+      "44": "520.00",
+      "40": "2",
+      "21": "1"
+    },
+    "expect": {
+      "35": "9",
+      "58": "Too late to replace"
+    },
+    "delay_after": 0.3
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Cancel Active Order - Step 1: Place order and capture ClOrdID",
+    "send": {
+      "35": "D",
+      "55": "GOOG",
+      "54": "1",
+      "38": "25",
+      "44": "175.00",
+      "40": "2",
+      "21": "1"
+    },
+    "expect": {
+      "35": "8",
+      "39": "0",
+      "150": "0",
+      "55": "GOOG"
+    },
+    "capture": {
+      "goog_original_id": "11"
+    },
+    "delay_after": 0.3
+  },
+  {
+    "name": "Cancel Active Order - Step 2: Cancel the order placed above",
+    "send": {
+      "35": "F",
+      "41": "{{goog_original_id}}",
+      "55": "GOOG",
+      "54": "1"
+    },
+    "expect": {
+      "35": "8",
+      "39": "4",
+      "150": "4",
+      "55": "GOOG"
+    },
+    "capture": {
+      "goog_cancelled_id": "11"
+    },
+    "delay_after": 0.3
+  },
+  {
+    "name": "Cancel Active Order - Step 3: Cancel already-cancelled order (expect reject)",
+    "send": {
+      "35": "F",
+      "41": "{{goog_cancelled_id}}",
+      "55": "GOOG",
+      "54": "1"
+    },
+    "expect": {
+      "35": "9",
+      "58": "Too late to cancel"
+    },
+    "delay_after": 0.3
+  }
+]

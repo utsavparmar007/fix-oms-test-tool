@@ -1,0 +1,69 @@
+[
+  {
+    "name": "Mass Cancel - Step 1: Place Order 1",
+    "send": {
+      "35": "D",
+      "55": "MASS",
+      "54": "1",
+      "38": "100",
+      "40": "2",
+      "44": "50.00"
+    },
+    "expect": {
+      "35": "8",
+      "39": "0",
+      "55": "MASS"
+    },
+    "delay_after": 0.2
+  },
+  {
+    "name": "Mass Cancel - Step 2: Place Order 2",
+    "send": {
+      "35": "D",
+      "55": "MASS",
+      "54": "1",
+      "38": "200",
+      "40": "2",
+      "44": "50.00"
+    },
+    "expect": {
+      "35": "8",
+      "39": "0",
+      "55": "MASS"
+    },
+    "delay_after": 0.2
+  },
+  {
+    "name": "Mass Cancel - Step 3: Send Mass Cancel Request (Tag 530=1 for Symbol)",
+    "send": {
+      "35": "q",
+      "530": "1",
+      "55": "MASS"
+    },
+    "expect_sequence": [
+      {
+        "_label": "Execution Report for Order 1",
+        "35": "8",
+        "150": "4",
+        "39": "4",
+        "55": "MASS"
+      },
+      {
+        "_label": "Execution Report for Order 2",
+        "35": "8",
+        "150": "4",
+        "39": "4",
+        "55": "MASS"
+      },
+      {
+        "_label": "Order Mass Cancel Report",
+        "35": "r",
+        "530": "1",
+        "531": "1",
+        "533": "2"
+      }
+    ],
+    "drain_after": true,
+    "delay_after": 0.5
+  }
+]
