@@ -66,10 +66,7 @@ python test.py
 # 4. Run a single test file
 python test.py --tests tests/01_new_order.json
 
-# 5. Run as CLIENT2
-python test.py --sender CLIENT2
-
-# 6. Increase response timeout to 10s
+# 5. Increase response timeout to 10s
 python test.py --timeout 10
 ```
 
@@ -130,100 +127,6 @@ Each test case has 3 parts:
 
 Put multiple test cases in one file as a JSON array `[{...}, {...}]`.
 Files in `tests/` are loaded alphabetically — prefix with `01_`, `02_` to control order.
-
----
-
-## Repeating Groups in JSON
-
-To send a FIX repeating group (e.g. `NoParties` / Tag 453), use a nested list under the group count tag:
-
-```json
-{
-  "name": "New Order with Parties",
-  "send": {
-    "35": "D",
-    "55": "AAPL",
-    "54": "1",
-    "38": "100",
-    "44": "150.00",
-    "40": "2",
-    "453": [
-      {"448": "DESK1", "447": "D", "452": "76"},
-      {"448": "FIRM1", "447": "D", "452": "1"}
-    ]
-  },
-  "expect": {
-    "35": "8",
-    "39": "0"
-  }
-}
-```
-
-| Tag | Name           | Role |
-|-----|----------------|------|
-| 453 | NoParties      | Count of party entries in the group |
-| 448 | PartyID        | Party identifier string |
-| 447 | PartyIDSource  | `D` = Proprietary / Custom |
-| 452 | PartyRole      | `1` = ExecutingFirm, `76` = TradingDesk |
-
----
-
-## FOK and IOC Orders
-
-Use Tag 59 (`TimeInForce`) to control order execution behaviour:
-
-| Value | Name | Behaviour |
-|-------|------|-----------|
-| `0`   | Day  | Active for the trading day |
-| `1`   | GTC  | Good Till Cancelled |
-| `3`   | IOC  | Immediate Or Cancel — fill what you can, cancel the rest |
-| `4`   | FOK  | Fill Or Kill — fully fill or reject entirely |
-
-```json
-{
-  "name": "FOK Order - full fill expected",
-  "send": {
-    "35": "D",
-    "55": "AAPL",
-    "54": "1",
-    "38": "100",
-    "44": "150.00",
-    "40": "2",
-    "59": "4"
-  },
-  "expect": {
-    "35": "8",
-    "39": "2"
-  }
-}
-```
-
----
-
-## Mass Cancel (35=q / 35=r)
-
-Send a `OrderMassCancelRequest` (35=q) to cancel all resting orders at once.
-The OMS responds with an `OrderMassCancelReport` (35=r).
-
-```json
-{
-  "name": "Mass Cancel - All Orders",
-  "send": {
-    "35": "q",
-    "530": "7"
-  },
-  "expect": {
-    "35": "r",
-    "531": "7"
-  },
-  "delay_before": 0.5
-}
-```
-
-| Tag | Name                    | Values |
-|-----|-------------------------|--------|
-| 530 | MassCancelRequestType   | `7` = Cancel All Orders |
-| 531 | MassCancelResponse      | `7` = All Orders Canceled, `0` = Cancel Request Rejected |
 
 ---
 
