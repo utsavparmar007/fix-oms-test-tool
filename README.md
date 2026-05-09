@@ -53,13 +53,12 @@ FIX TEST/
 
 ```bash
 # 1. Make sure OMS is running first
-Ran your oms 
+Run your oms 
 
 # 2. Install dependency
-cd FIX TEST
 pip install quickfix==1.15.1
 # OR use your existing .whl:
-pip install ../claude2/quickfix-1.15.1-cp39-cp39-win_amd64.whl
+pip install ../quickfix-1.15.1-cp39-cp39-win_amd64.whl
 
 # 3. Run all tests
 python test.py
