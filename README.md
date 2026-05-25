@@ -46,6 +46,23 @@ FIX TEST/
     ├── 08_algo_order.json            ← Algo / algorithmic order tests
     └── 09_mass_cancel.json          ← Mass Cancel (35=q) / Report (35=r)
 ```
+### Test Framework Architecture
+
+```mermaid
+graph TD
+    JSON[JSON Test Cases] -->|Parse| Runner["test_runner.py"]
+    Runner -->|Dict| Builder["builder.py (FIX Message)"]
+    Builder -->|Raw FIX| App["application.py (QuickFIX)"]
+    
+    App -->|TCP Connection| OMS[(Target OMS System)]
+    OMS -.->|Execution Report| App
+    
+    App -.->|Response Dict| Validator["validator.py"]
+    JSON -.->|Expected Tags| Validator
+    Validator -->|Pass/Fail| Reporter["reporter.py (Terminal)"]
+    
+    style OMS fill:#2c3e50,stroke:#f39c12,stroke-width:2px,color:#fff
+``` 
 
 ---
 
