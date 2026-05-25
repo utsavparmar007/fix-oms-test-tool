@@ -3,7 +3,8 @@
 Connects to your OMS as a FIX 4.4 client, sends messages automatically,
 and validates every response tag by tag. No UI. Pure terminal output.
 
----## What It Tests
+---
+## What It Tests
 
 | # | File | What It Covers |
 |---|------|----------------|
