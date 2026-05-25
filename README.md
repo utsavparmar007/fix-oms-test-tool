@@ -50,18 +50,35 @@ FIX TEST/
 
 ```mermaid
 graph TD
-    JSON[JSON Test Cases] -->|Parse| Runner["test_runner.py"]
-    Runner -->|Dict| Builder["builder.py (FIX Message)"]
-    Builder -->|Raw FIX| App["application.py (QuickFIX)"]
+    %% Nodes
+    JSON["📄 JSON Test Cases"]
+    Runner["⚙️ test_runner.py<br>(Runner)"]
+    Builder["🛠️ builder.py<br>(FIX Message)"]
+    App["🌐 application.py<br>(QuickFIX)"]
+    OMS[("🎯 Target OMS System")]
+    Validator["✅ validator.py<br>(Validator)"]
+    Reporter["📊 reporter.py<br>(Terminal)"]
+
+    %% Flow Paths
+    JSON -->|"Parse"| Runner
+    Runner -->|"Dict"| Builder
+    Builder -->|"Raw FIX"| App
     
-    App -->|TCP Connection| OMS[(Target OMS System)]
-    OMS -.->|Execution Report| App
+    App -->|"TCP Connection"| OMS
+    OMS -.->|"Execution Report"| App
     
-    App -.->|Response Dict| Validator["validator.py"]
-    JSON -.->|Expected Tags| Validator
-    Validator -->|Pass/Fail| Reporter["reporter.py (Terminal)"]
-    
-    style OMS fill:#2c3e50,stroke:#f39c12,stroke-width:2px,color:#fff
+    App -.->|"Response Dict"| Validator
+    JSON -.->|"Expected Tags"| Validator
+    Validator -->|"Pass/Fail"| Reporter
+
+    %% Vibrant Styling
+    style JSON fill:#f1c40f,stroke:#d4ac0d,stroke-width:2px,color:#000000
+    style Runner fill:#9b59b6,stroke:#76448a,stroke-width:2px,color:#ffffff
+    style Builder fill:#3498db,stroke:#21618c,stroke-width:2px,color:#ffffff
+    style App fill:#2ecc71,stroke:#1d8348,stroke-width:2px,color:#ffffff
+    style OMS fill:#2c3e50,stroke:#e67e22,stroke-width:2px,color:#ffffff
+    style Validator fill:#e67e22,stroke:#ba4a00,stroke-width:2px,color:#ffffff
+    style Reporter fill:#e74c3c,stroke:#943126,stroke-width:2px,color:#ffffff
 ``` 
 
 ---
